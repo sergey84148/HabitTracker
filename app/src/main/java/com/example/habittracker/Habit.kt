@@ -2,7 +2,6 @@ package com.example.habittracker
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.room.vo.Entity
 
 @Entity(tableName = "habits")
 data class Habit(

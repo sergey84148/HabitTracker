@@ -19,7 +19,7 @@ fun AddHabitScreen(viewModel: HabitViewModel = hiltViewModel(), onNavigateBack: 
 
     Scaffold(
         topBar = {
-            SmallTopAppBar(title = { Text(stringResource(R.string.create_habit_title)) })
+            //SmallTopAppBar(title = { Text(stringResource(R.string.create_habit_title)) })
         }
     ) {
         Column(modifier = Modifier.padding(it)) {
@@ -27,7 +27,7 @@ fun AddHabitScreen(viewModel: HabitViewModel = hiltViewModel(), onNavigateBack: 
             OutlinedTextField(
                 value = title,
                 onValueChange = { title = it },
-                label = { Text(stringResource(R.string.enter_habit_name)) },
+                //label = { Text(stringResource(R.string.enter_habit_name)) },
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done)
             )
             Spacer(modifier = Modifier.height(16.dp))
@@ -37,7 +37,7 @@ fun AddHabitScreen(viewModel: HabitViewModel = hiltViewModel(), onNavigateBack: 
                     onNavigateBack()
                 }
             }) {
-                Text(stringResource(R.string.save_button_label))
+                //Text(stringResource(R.string.save_button_label))
             }
         }
     }
