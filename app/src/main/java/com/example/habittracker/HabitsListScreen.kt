@@ -14,7 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-//import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import kotlinx.coroutines.launch
 
 @Composable
@@ -23,7 +23,7 @@ fun HabitsListScreen(viewModel: HabitViewModel = hiltViewModel()) {
     val context = LocalContext.current
     val habits = viewModel.state.collectAsState().value
 
-    Scaffold(topBar = {
+    /*Scaffold(topBar = {
         SmallTopAppBar(title = { Text("Трекер привычек") })
     }) {
         Surface(modifier = Modifier.fillMaxSize()) {
@@ -44,7 +44,7 @@ fun HabitsListScreen(viewModel: HabitViewModel = hiltViewModel()) {
                 }
             }
         }
-    }
+    }*/
 }
 
 @Composable

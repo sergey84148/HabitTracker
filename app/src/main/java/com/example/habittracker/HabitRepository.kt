@@ -1,6 +1,11 @@
 package com.example.habittracker
 
+import dagger.Binds
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
 interface HabitRepository {
     fun getAll(): Flow<List<Habit>>
@@ -9,7 +14,7 @@ interface HabitRepository {
     suspend fun update(habit: Habit)
 }
 
-class InMemoryHabitRepository : HabitRepository {
+class InMemoryHabitRepository @Inject constructor() : HabitRepository {
     private val habits = mutableListOf<Habit>()
 
     override fun getAll(): Flow<List<Habit>> =
@@ -29,4 +34,11 @@ class InMemoryHabitRepository : HabitRepository {
             habits[index] = habit
         }
     }
+}
+
+@InstallIn(SingletonComponent::class)
+@Module
+interface HabitRepositoryModule {
+    @Binds
+    fun bindInMemoryHabitRepository(impl: InMemoryHabitRepository): HabitRepository
 }
