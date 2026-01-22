@@ -11,7 +11,7 @@ fun NavGraph(navController: NavHostController) {
     val viewModel: HabitViewModel = viewModel()
     NavHost(navController, startDestination = "habit_list") {
         composable("habit_list") {
-            HabitListScreen(viewModel)
+            HabitListScreen(navController, viewModel)
         }
         composable("add_habit") {
             AddHabitScreen(viewModel) {

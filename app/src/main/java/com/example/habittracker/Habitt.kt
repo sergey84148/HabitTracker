@@ -1,6 +1,5 @@
 package com.example.habittracker
 
-
 import java.time.DayOfWeek
 
 data class Habit(

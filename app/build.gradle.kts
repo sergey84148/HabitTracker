@@ -64,6 +64,8 @@ dependencies {
 
         exclude(group = "com.intellij", module = "annotations")
     }
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.room.ktx)
     ksp(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
 
