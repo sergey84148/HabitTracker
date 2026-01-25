@@ -1,4 +1,4 @@
-package com.example.habittracker.Database
+package com.example.habittracker.database
 
 import androidx.room.TypeConverter
 import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.reflect.TypeToken
