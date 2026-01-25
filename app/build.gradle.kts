@@ -1,3 +1,5 @@
+import org.gradle.kotlin.dsl.implementation
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -43,6 +45,8 @@ android {
 }
 
 dependencies {
+    implementation (libs.gson)
+
     // Основные зависимости
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -66,6 +70,7 @@ dependencies {
     }
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.room.ktx)
+    implementation(libs.firebase.crashlytics.buildtools)
     ksp(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
 

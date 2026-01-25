@@ -1,0 +1,23 @@
+package com.example.habittracker.Database
+
+import androidx.room.TypeConverter
+import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.reflect.TypeToken
+import com.google.gson.Gson
+import java.lang.reflect.Type
+import java.time.DayOfWeek
+
+object HabitTypeConverters {
+
+    @TypeConverter
+    @JvmStatic
+    fun fromDaysToJson(value: Map<DayOfWeek, Boolean>): String {
+        return Gson().toJson(value)
+    }
+
+    @TypeConverter
+    @JvmStatic
+    fun jsonToDays(json: String): Map<DayOfWeek, Boolean> {
+        val type: Type = object : TypeToken<Map<DayOfWeek, Boolean>>() {}.type
+        return Gson().fromJson(json, type)
+    }
+}

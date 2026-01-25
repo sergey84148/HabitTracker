@@ -1,29 +1,22 @@
-import androidx.room.*
+package com.example.habittracker.Database
+
+
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import java.time.DayOfWeek
+
 
 @Entity
 data class HabitEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val name: String,
-    val days: Map<DayOfWeek, Boolean>
+    val days: Map<DayOfWeek, Boolean> = mapOf(
+        DayOfWeek.MONDAY to false,
+        DayOfWeek.TUESDAY to false,
+        DayOfWeek.WEDNESDAY to false,
+        DayOfWeek.THURSDAY to false,
+        DayOfWeek.FRIDAY to false,
+        DayOfWeek.SATURDAY to false,
+        DayOfWeek.SUNDAY to false
+    )
 )
-
-@Dao
-interface HabitDao {
-    @Insert
-    suspend fun insert(habit: HabitEntity)
-
-    @Update
-    suspend fun update(habit: HabitEntity)
-
-    @Query("SELECT * FROM HabitEntity WHERE id = :id")
-    suspend fun getHabitById(id: Int): HabitEntity?
-
-    @Query("SELECT * FROM HabitEntity")
-    suspend fun getAllHabits(): List<HabitEntity>
-}
-
-@Database(entities = [HabitEntity::class], version = 1)
-abstract class HabitDatabase : RoomDatabase() {
-    abstract fun habitDao(): HabitDao
-}

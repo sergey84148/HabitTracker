@@ -2,35 +2,55 @@ package com.example.habittracker
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.habittracker.database.HabitEntity
+import com.example.habittracker.database.HabitDao
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.time.DayOfWeek
 import javax.inject.Inject
 
-class HabitViewModel : ViewModel() {
-    private val _habits = MutableStateFlow(emptyList<Habit>())
-    val habits: StateFlow<List<Habit>> = _habits
+@HiltViewModel
+class HabitViewModel @Inject constructor(private val dao: HabitDao) : ViewModel() {
+
+    val habits = dao.observeAllHabits().stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(),
+        initialValue = emptyList<HabitEntity>()
+    )
 
     fun createHabit(name: String) {
-        val newHabit = Habit(
-            id = habits.value.size + 1,
+        val newHabit = HabitEntity(
             name = name,
-            days = mutableMapOf()
+            days = mapOf(
+                DayOfWeek.MONDAY to false,
+                DayOfWeek.TUESDAY to false,
+                DayOfWeek.WEDNESDAY to false,
+                DayOfWeek.THURSDAY to false,
+                DayOfWeek.FRIDAY to false,
+                DayOfWeek.SATURDAY to false,
+                DayOfWeek.SUNDAY to false
+            )
         )
-        _habits.value = habits.value + newHabit
+
+        viewModelScope.launch(Dispatchers.IO) {
+            dao.insert(newHabit)
+        }
     }
 
     fun markAsCompleted(id: Int) {
-        val updatedHabits = habits.value.map { habit ->
-            if (habit.id == id) {
-                habit.copy(days = habit.days.mapValues { it.value || true }.toMutableMap())
-            } else {
-                habit
+        viewModelScope.launch(Dispatchers.IO) {
+            val habit = dao.getHabitById(id)
+            habit?.let {
+                val updatedHabit = it.copy(
+                    days = it.days.toMutableMap().apply {
+                        forEach { entry -> this[entry.key] = true }
+                    }
+                )
+                dao.update(updatedHabit)
             }
         }
-        _habits.value = updatedHabits
     }
-
-
 }

@@ -11,10 +11,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.room.Room
 import java.time.DayOfWeek
 
 private val russianDayNames = arrayOf("пн", "вт", "ср", "чт", "пт", "сб", "вс")
@@ -23,14 +21,6 @@ private val russianDayNames = arrayOf("пн", "вт", "ср", "чт", "пт", "�
 fun HabitCardComposable(habit: Habit, onClick: () -> Unit) {
     val daysState = remember { mutableStateMapOf<DayOfWeek, Boolean>() }
     DayOfWeek.values().forEach { daysState[it] = false }
-
-    val db = Room.databaseBuilder(
-        LocalContext.current,
-        HabitDatabase::class.java,
-        "habit_database"
-    ).build()
-
-    val habitDao = db.habitDao()
 
     Card(modifier = Modifier.padding(8.dp)) {
         Column(Modifier.padding(16.dp)) {
