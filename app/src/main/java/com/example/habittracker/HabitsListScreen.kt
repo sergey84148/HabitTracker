@@ -14,6 +14,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 
+
 // Основной экран с списком привычек
 @Composable
 fun HabitListScreen(navController: NavHostController, viewModel: HabitViewModel) {
