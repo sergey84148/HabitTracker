@@ -15,7 +15,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.myapplication"
-        minSdk = 33
+        minSdk = 29
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -63,13 +63,9 @@ dependencies {
     // Hilt
     implementation(libs.hilt.android)
     implementation(libs.androidx.room.common.jvm)
-    implementation(libs.androidx.room.compiler) {
-
-        exclude(group = "com.intellij", module = "annotations")
-    }
+    ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.room.ktx)
-    implementation(libs.firebase.crashlytics.buildtools)
     ksp(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
 

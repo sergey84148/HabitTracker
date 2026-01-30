@@ -5,5 +5,5 @@ import java.time.DayOfWeek
 data class Habit(
     val id: Int,
     val name: String,
-    val days: MutableMap<DayOfWeek, Boolean>
+    val days: Map<DayOfWeek, Boolean>
 )

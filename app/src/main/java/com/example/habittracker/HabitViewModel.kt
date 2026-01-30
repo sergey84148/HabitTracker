@@ -7,19 +7,33 @@ import com.example.habittracker.database.HabitDao
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import javax.inject.Inject
 
 @HiltViewModel
-class HabitViewModel @Inject constructor(private val dao: HabitDao) : ViewModel() {
+class HabitViewModel @Inject constructor(
+    private val dao: HabitDao
+) : ViewModel() {
 
-    val habits = dao.observeAllHabits().stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(),
-        initialValue = emptyList<HabitEntity>()
-    )
+    // Преобразуем HabitEntity → Habit для UI
+    val habits = dao.observeAllHabits()
+        .map { entities ->
+            entities.map { entity ->
+                Habit(
+                    id = entity.id,
+                    name = entity.name,
+                    days = entity.days
+                )
+            }
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = emptyList()
+        )
 
     fun createHabit(name: String) {
         val newHabit = HabitEntity(

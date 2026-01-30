@@ -1,5 +1,6 @@
 package com.example.habittracker.database
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
@@ -8,6 +9,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface HabitDao {
+
     @Insert
     suspend fun insert(habit: HabitEntity)
 
@@ -20,6 +22,10 @@ interface HabitDao {
     @Query("SELECT * FROM HabitEntity")
     suspend fun getAllHabits(): List<HabitEntity>
 
+    // Исправлено: возвращает Flow<List<HabitEntity>>
     @Query("SELECT * FROM HabitEntity")
-    fun observeAllHabits(): Flow<HabitEntity>
+    fun observeAllHabits(): Flow<List<HabitEntity>>
+
+    @Query("SELECT * FROM HabitEntity WHERE id = :habitId")
+    fun observeHabit(habitId: Long): LiveData<HabitEntity?>
 }

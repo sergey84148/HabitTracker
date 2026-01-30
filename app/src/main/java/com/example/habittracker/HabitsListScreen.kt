@@ -2,6 +2,7 @@ package com.example.habittracker
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
@@ -15,7 +16,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 
 
-// Основной экран с списком привычек
+
 @Composable
 fun HabitListScreen(navController: NavHostController, viewModel: HabitViewModel) {
     val habits by viewModel.habits.collectAsState()
@@ -47,13 +48,13 @@ fun HabitListScreen(navController: NavHostController, viewModel: HabitViewModel)
                     textAlign = TextAlign.Center
                 )
             }
-/*
+
             // Список привычек
             items(habits) { habit ->
                 HabitCardComposable(habit) {
                     viewModel.markAsCompleted(habit.id)
                 }
-            }*/
+            }
         }
     }
 }

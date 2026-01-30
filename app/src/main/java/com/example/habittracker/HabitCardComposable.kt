@@ -12,7 +12,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import java.time.DayOfWeek
 
 private val russianDayNames = arrayOf("пн", "вт", "ср", "чт", "пт", "сб", "вс")
@@ -23,17 +25,17 @@ fun HabitCardComposable(habit: Habit, onClick: () -> Unit) {
     DayOfWeek.values().forEach { daysState[it] = false }
 
     Card(modifier = Modifier.padding(8.dp)) {
-        Column(Modifier.padding(16.dp)) {
+        Column(Modifier.padding(4.dp)) {
             Text(
-                text = "${habit.name}",
+                text = habit.name,
                 style = MaterialTheme.typography.headlineSmall
             )
 
             Spacer(modifier = Modifier.height(8.dp))
 
             LazyRow {
-                items(DayOfWeek.values().size) { index ->
-                    val day = DayOfWeek.values()[index]
+                items(DayOfWeek.entries.size) { index ->
+                    val day = DayOfWeek.entries[index]
                     DayOfWeekComposable(day, daysState[day] ?: false) { daysState[day] = !(daysState[day] ?: false) }
                 }
             }
@@ -61,4 +63,11 @@ fun DayOfWeekComposable(day: DayOfWeek, progress: Boolean, onClick: () -> Unit) 
 // Вспомогательная функция для короткого названия дня недели
 private fun DayOfWeek.shortName(): String {
     return russianDayNames[value - 1]
+}
+
+@Preview(showBackground = true)
+@Composable
+fun DayOfWeekComposablePreview() {
+    val viewModel: HabitViewModel = viewModel()
+    AddHabitScreen(viewModel, {})
 }
