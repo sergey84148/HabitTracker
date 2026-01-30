@@ -3,23 +3,28 @@ package com.example.habittracker
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.ui.tooling.preview.Preview
 
 
 @Composable
-fun HabitListScreen(navController: NavHostController, viewModel: HabitViewModel) {
+fun HabitListScreen(
+    navController: NavHostController,
+    viewModel: HabitViewModel
+) {
+    // Наблюдаем за состоянием списка привычек
     val habits by viewModel.habits.collectAsState()
+
 
     Scaffold(
         floatingActionButton = {
@@ -27,7 +32,10 @@ fun HabitListScreen(navController: NavHostController, viewModel: HabitViewModel)
                 onClick = { navController.navigate("add_habit") },
                 modifier = Modifier.padding(16.dp)
             ) {
-                Icon(imageVector = Icons.Default.Add, contentDescription = "Add Habit")
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = "Добавить привычку"
+                )
             }
         }
     ) { innerPadding ->
@@ -36,7 +44,7 @@ fun HabitListScreen(navController: NavHostController, viewModel: HabitViewModel)
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            // Заголовок страницы
+            // Заголовок экрана
             item {
                 Text(
                     text = "Привычки",
@@ -49,17 +57,27 @@ fun HabitListScreen(navController: NavHostController, viewModel: HabitViewModel)
                 )
             }
 
-            // Список привычек
+            // Список карточек привычек
             items(habits) { habit ->
-                HabitCardComposable(habit) {
-                    viewModel.markAsCompleted(habit.id)
-                }
+                HabitCardComposable(
+                    habit = habit,
+                    onClick = {
+                        // Отметить привычку как выполненную
+                        viewModel.markAsCompleted(habit.id)
+                    },
+                    onDelete = { habitId: Int -> // Явно указываем тип параметра как Int
+                        // Удалить привычку из списка
+                        viewModel.removeHabit(habitId)
+                    }
+                )
+                // Отступ между карточками
+                Spacer(modifier = Modifier.height(8.dp))
             }
         }
     }
 }
 
-// Предварительный просмотр экрана списка привычек
+// Предварительный просмотр экрана (для превью в Android Studio)
 @Preview(showBackground = true)
 @Composable
 fun HabitListScreenPreview() {
