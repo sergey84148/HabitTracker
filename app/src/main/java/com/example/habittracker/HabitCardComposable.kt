@@ -5,7 +5,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -14,34 +13,29 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.Card
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SwipeToDismissBox
-import androidx.compose.material3.SwipeToDismissBoxValue
-import androidx.compose.material3.Text
-import androidx.compose.material3.rememberSwipeToDismissBoxState
+import androidx.compose.material3.*
+import androidx.compose.runtime.Composable
 import java.time.DayOfWeek
-import java.time.LocalDate
+import androidx.compose.material3.SwipeToDismissBoxValue
+import androidx.compose.material3.SwipeToDismissBox
+import androidx.compose.material3.rememberSwipeToDismissBoxState
+
+
 
 private val russianDayNames = arrayOf("пн", "вт", "ср", "чт", "пт", "сб", "вс")
 
 @Composable
 fun HabitCardComposable(
-    habit: Habit,
+    name: String,
+    daysProgress: Map<DayOfWeek, Boolean>,
+    today: DayOfWeek,
     onClick: () -> Unit,
-    onDelete: (Int) -> Unit
+    onDelete: () -> Unit
 ) {
-    val daysState = remember { mutableStateMapOf<DayOfWeek, Boolean>() }
-    DayOfWeek.entries.forEach { daysState[it] = false }
-
-    // Определяем текущий день недели
-    val today = DayOfWeek.of(LocalDate.now().dayOfWeek.value)
-
     val dismissState = rememberSwipeToDismissBoxState(
         confirmValueChange = { newValue ->
             if (newValue == SwipeToDismissBoxValue.DismissToEnd) {
-                onDelete(habit.id)
+                onDelete()
                 true
             } else {
                 false
@@ -77,7 +71,7 @@ fun HabitCardComposable(
             ) {
                 Column(Modifier.padding(4.dp)) {
                     Text(
-                        text = habit.name,
+                        text = name,
                         style = MaterialTheme.typography.headlineSmall,
                         modifier = Modifier.padding(top = 8.dp, start = 8.dp)
                     )
@@ -89,13 +83,9 @@ fun HabitCardComposable(
                             val day = DayOfWeek.entries[index]
                             DayOfWeekComposable(
                                 day = day,
-                                progress = daysState[day] ?: false,
+                                progress = daysProgress[day] ?: false,
                                 isToday = (day == today),
-                                onClick = {
-                                    if (day == today) {
-                                        daysState[day] = !(daysState[day] ?: false)
-                                    }
-                                }
+                                onClick = {} // заглушка для Preview
                             )
                         }
                     }
