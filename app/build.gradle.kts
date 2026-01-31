@@ -1,11 +1,11 @@
 import org.gradle.kotlin.dsl.implementation
 
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.ksp)
     alias(libs.plugins.dagger.hilt.android)
-
 }
 
 android {
@@ -36,38 +36,45 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 
-
     buildFeatures {
         compose = true
     }
 }
 
 dependencies {
-    // BOM (единая версия для Compose)
+    // BOM для управления версиями Compose
     implementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(platform(libs.androidx.compose.bom))
 
+    // Основные компоненты Compose
+    implementation(libs.androidx.compose.foundation)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.graphics)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.compose.runtime)
+
+    // Другие зависимости
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.material3)
-
     implementation(libs.androidx.appcompat)
-    implementation(libs.material)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.compose.material.icons.core)
-    implementation(libs.androidx.compose.runtime)
+
+    // Hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
+
+    // Room
     implementation(libs.androidx.room.common.jvm)
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
+
+    // JSON
     implementation(libs.gson)
+
+    // Тесты
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -75,4 +82,3 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }
-

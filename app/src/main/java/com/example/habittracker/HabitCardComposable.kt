@@ -5,22 +5,19 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.*
+import androidx.compose.material3.icons.Icons
+import androidx.compose.material3.icons.filled.Check
+import androidx.compose.material3.icons.filled.Delete
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
 import java.time.DayOfWeek
-import androidx.compose.material3.SwipeToDismissBoxValue
-import androidx.compose.material3.SwipeToDismissBox
-import androidx.compose.material3.rememberSwipeToDismissBoxState
-
-
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.material3.ripple.rememberRipple
 
 private val russianDayNames = arrayOf("пн", "вт", "ср", "чт", "пт", "сб", "вс")
 
@@ -56,8 +53,8 @@ fun HabitCardComposable(
                     contentAlignment = Alignment.CenterEnd
                 ) {
                     Icon(
-                        imageVector = Icons.Default.Delete,
-                        contentDescription = null,
+                        imageVector = Icons.Filled.Delete,
+                        contentDescription = "Удалить привычку",
                         tint = Color.White,
                         modifier = Modifier.size(24.dp)
                     )
@@ -114,11 +111,15 @@ fun DayOfWeekComposable(
                 else MaterialTheme.colorScheme.secondaryContainer,
                 CircleShape
             )
-            .clickable(enabled = isToday, onClick = onClick)
+            .clickable(
+                enabled = isToday,
+                onClick = onClick,
+                indication = rememberRipple()
+            )
     ) {
         if (isToday && progress) {
             Icon(
-                imageVector = Icons.Default.Check,
+                imageVector = Icons.Filled.Check,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onPrimaryContainer
             )
@@ -127,7 +128,8 @@ fun DayOfWeekComposable(
                 text = day.shortName(),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.labelSmall,
-                color = if (isToday) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSecondaryContainer
+                color = if (isToday) MaterialTheme.colorScheme.onPrimaryContainer
+                else MaterialTheme.colorScheme.onSecondaryContainer
             )
         }
     }
@@ -135,4 +137,31 @@ fun DayOfWeekComposable(
 
 private fun DayOfWeek.shortName(): String {
     return russianDayNames[value - 1]
+}
+
+@Preview(
+    name = "Default HabitCard",
+    group = "HabitCards",
+    showBackground = true,
+    widthDp = 320,
+    heightDp = 180
+)
+@Composable
+fun HabitCardComposablePreview() {
+    val testProgress = mapOf(
+        DayOfWeek.MONDAY to true,
+        DayOfWeek.TUESDAY to false,
+        DayOfWeek.WEDNESDAY to true,
+        DayOfWeek.THURSDAY to false,
+        DayOfWeek.FRIDAY to true,
+        DayOfWeek.SATURDAY to false,
+        DayOfWeek.SUNDAY to true
+    )
+    HabitCardComposable(
+        name = "Android",
+        daysProgress = testProgress,
+        today = DayOfWeek.WEDNESDAY,
+        onClick = {},
+        onDelete = {}
+    )
 }
