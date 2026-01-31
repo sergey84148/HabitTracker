@@ -6,4 +6,5 @@ data class Habit(
     val id: Int,
     val name: String,
     val days: Map<DayOfWeek, Boolean>
+
 )

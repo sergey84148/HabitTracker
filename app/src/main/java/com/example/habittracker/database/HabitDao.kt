@@ -6,7 +6,6 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.example.habittracker.Habit
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -18,11 +17,9 @@ interface HabitDao {
     @Update
     suspend fun update(habit: HabitEntity)
 
-    // Удаление привычки по объекту
     @Delete
     suspend fun delete(habit: HabitEntity)
 
-    // Удаление по ID (альтернативный метод)
     @Query("DELETE FROM HabitEntity WHERE id = :id")
     suspend fun deleteById(id: Int)
 
@@ -32,7 +29,6 @@ interface HabitDao {
     @Query("SELECT * FROM HabitEntity")
     suspend fun getAllHabits(): List<HabitEntity>
 
-    // Исправлено: возвращает Flow<List<HabitEntity>>
     @Query("SELECT * FROM HabitEntity")
     fun observeAllHabits(): Flow<List<HabitEntity>>
 

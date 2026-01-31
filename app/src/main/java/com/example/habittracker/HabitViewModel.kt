@@ -1,6 +1,5 @@
 package com.example.habittracker
 
-import android.R.attr.id
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.habittracker.database.HabitEntity
@@ -19,7 +18,6 @@ class HabitViewModel @Inject constructor(
     private val dao: HabitDao
 ) : ViewModel() {
 
-    // Потоковая передача списка привычек (Entity → Habit для UI)
     val habits = dao.observeAllHabits()
         .map { entities ->
             entities.map { entity ->
@@ -63,7 +61,6 @@ class HabitViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val habit = dao.getHabitById(id)
             habit?.let {
-                // Обновляем только текущий день (например, сегодня среда → ставим true для среды)
                 val today = DayOfWeek.from(java.time.LocalDate.now().dayOfWeek)
                 val updatedDays = it.days.toMutableMap()
                 updatedDays[today] = true
@@ -76,20 +73,9 @@ class HabitViewModel @Inject constructor(
 
     fun removeHabit(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            dao.deleteById(id)  // Предполагаем, что в DAO есть метод deleteById
+            dao.deleteById(id)
         }
     }
 
-
-    fun updateHabitName(id: Int, newName: String) {
-        if (newName.isBlank()) return
-
-        viewModelScope.launch(Dispatchers.IO) {
-            val habit = dao.getHabitById(id)
-            habit?.let {
-                val updatedHabit = it.copy(name = newName.trim())
-                dao.update(updatedHabit)
-            }
-        }
-    }
+    
 }

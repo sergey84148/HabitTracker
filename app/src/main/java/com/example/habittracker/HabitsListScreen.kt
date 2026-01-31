@@ -13,7 +13,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.ui.tooling.preview.Preview
 
 
@@ -22,9 +21,7 @@ fun HabitListScreen(
     navController: NavHostController,
     viewModel: HabitViewModel
 ) {
-    // Наблюдаем за состоянием списка привычек
     val habits by viewModel.habits.collectAsState()
-
 
     Scaffold(
         floatingActionButton = {
@@ -44,7 +41,6 @@ fun HabitListScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            // Заголовок экрана
             item {
                 Text(
                     text = "Привычки",
@@ -57,27 +53,19 @@ fun HabitListScreen(
                 )
             }
 
-            // Список карточек привычек
-            items(habits) { habit ->
+            items(habits, key = { it.id }) { habit ->
                 HabitCardComposable(
                     habit = habit,
-                    onClick = {
-                        // Отметить привычку как выполненную
-                        viewModel.markAsCompleted(habit.id)
-                    },
-                    onDelete = { habitId: Int -> // Явно указываем тип параметра как Int
-                        // Удалить привычку из списка
+                    onClick = { viewModel.markAsCompleted(habit.id) },
+                    onDelete = { habitId ->
                         viewModel.removeHabit(habitId)
                     }
                 )
-                // Отступ между карточками
-                Spacer(modifier = Modifier.height(8.dp))
             }
         }
     }
 }
 
-// Предварительный просмотр экрана (для превью в Android Studio)
 @Preview(showBackground = true)
 @Composable
 fun HabitListScreenPreview() {

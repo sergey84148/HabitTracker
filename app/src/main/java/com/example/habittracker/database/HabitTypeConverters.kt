@@ -11,13 +11,11 @@ object HabitTypeConverters {
 
     @TypeConverter
     fun fromDaysToJson(value: Map<DayOfWeek, Boolean>?): String? {
-        // Если value == null → возвращаем null
         return value?.let { gson.toJson(it) }
     }
 
     @TypeConverter
     fun jsonToDays(json: String?): Map<DayOfWeek, Boolean>? {
-        // Если json == null → возвращаем null
         return json?.let {
             val type = object : TypeToken<Map<DayOfWeek, Boolean>>() {}.type
             gson.fromJson(it, type)

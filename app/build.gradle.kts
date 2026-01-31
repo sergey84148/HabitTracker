@@ -1,4 +1,3 @@
-import com.android.sdklib.internal.avd.ColdBoot.arguments
 import org.gradle.kotlin.dsl.implementation
 
 plugins {
@@ -79,4 +78,5 @@ dependencies {
     // Debug-зависимости
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
 }
