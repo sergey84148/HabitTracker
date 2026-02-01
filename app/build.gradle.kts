@@ -1,6 +1,8 @@
 import org.gradle.kotlin.dsl.implementation
 
 
+
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
@@ -46,11 +48,6 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
 
     // Основные компоненты Compose
-    implementation(libs.androidx.compose.foundation)
-    implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.compose.ui)
-    implementation(libs.androidx.compose.ui.graphics)
-    implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.runtime)
 
     // Другие зависимости
@@ -63,6 +60,7 @@ dependencies {
 
     // Hilt
     implementation(libs.hilt.android)
+    implementation(libs.androidx.compose.material3)
     ksp(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
 

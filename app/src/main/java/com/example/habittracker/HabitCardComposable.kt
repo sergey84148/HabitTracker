@@ -5,10 +5,16 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.*
-import androidx.compose.material3.icons.Icons
-import androidx.compose.material3.icons.filled.Check
-import androidx.compose.material3.icons.filled.Delete
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SwipeToDismissBox
+import androidx.compose.material3.SwipeToDismissBoxValue
+import androidx.compose.material3.Text
+import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,7 +23,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import java.time.DayOfWeek
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.material3.ripple.rememberRipple
 
 private val russianDayNames = arrayOf("пн", "вт", "ср", "чт", "пт", "сб", "вс")
 
@@ -30,8 +35,8 @@ fun HabitCardComposable(
     onDelete: () -> Unit
 ) {
     val dismissState = rememberSwipeToDismissBoxState(
-        confirmValueChange = { newValue ->
-            if (newValue == SwipeToDismissBoxValue.DismissToEnd) {
+        confirmValueChange = { value ->
+            if (value == SwipeToDismissBoxValue.EndToStart) {
                 onDelete()
                 true
             } else {
@@ -42,23 +47,20 @@ fun HabitCardComposable(
 
     SwipeToDismissBox(
         state = dismissState,
-        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+        modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
         backgroundContent = {
-            if (dismissState.currentValue == SwipeToDismissBoxValue.DismissToEnd) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(Color.Red)
-                        .padding(16.dp),
-                    contentAlignment = Alignment.CenterEnd
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Delete,
-                        contentDescription = "Удалить привычку",
-                        tint = Color.White,
-                        modifier = Modifier.size(24.dp)
-                    )
-                }
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                contentAlignment = Alignment.CenterEnd
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Delete,
+                    contentDescription = "Удалить привычку",
+                    tint = Color.White,
+                    modifier = Modifier.size(24.dp)
+                )
             }
         },
         content = {
@@ -82,7 +84,7 @@ fun HabitCardComposable(
                                 day = day,
                                 progress = daysProgress[day] ?: false,
                                 isToday = (day == today),
-                                onClick = {} // заглушка для Preview
+                                onClick = {}
                             )
                         }
                     }
@@ -114,7 +116,6 @@ fun DayOfWeekComposable(
             .clickable(
                 enabled = isToday,
                 onClick = onClick,
-                indication = rememberRipple()
             )
     ) {
         if (isToday && progress) {
@@ -149,13 +150,13 @@ private fun DayOfWeek.shortName(): String {
 @Composable
 fun HabitCardComposablePreview() {
     val testProgress = mapOf(
-        DayOfWeek.MONDAY to true,
+        DayOfWeek.MONDAY to false,
         DayOfWeek.TUESDAY to false,
-        DayOfWeek.WEDNESDAY to true,
+        DayOfWeek.WEDNESDAY to false,
         DayOfWeek.THURSDAY to false,
-        DayOfWeek.FRIDAY to true,
+        DayOfWeek.FRIDAY to false,
         DayOfWeek.SATURDAY to false,
-        DayOfWeek.SUNDAY to true
+        DayOfWeek.SUNDAY to false
     )
     HabitCardComposable(
         name = "Android",

@@ -3,7 +3,6 @@ package com.example.habittracker
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -13,7 +12,14 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.ui.tooling.preview.Preview
+import java.time.LocalDate
+
 
 
 @Composable
@@ -22,6 +28,7 @@ fun HabitListScreen(
     viewModel: HabitViewModel
 ) {
     val habits by viewModel.habits.collectAsState()
+    val today = remember { LocalDate.now().dayOfWeek }
 
     Scaffold(
         floatingActionButton = {
@@ -31,7 +38,7 @@ fun HabitListScreen(
             ) {
                 Icon(
                     imageVector = Icons.Default.Add,
-                    contentDescription = "Добавить привычку"
+                    contentDescription = "Введите название привычку"
                 )
             }
         }
@@ -43,7 +50,7 @@ fun HabitListScreen(
         ) {
             item {
                 Text(
-                    text = "Привычки",
+                    text = "Привычки (нажмите + для добавления или смахните влево для удаления)",
                     style = MaterialTheme.typography.headlineMedium,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -55,11 +62,13 @@ fun HabitListScreen(
 
             items(habits, key = { it.id }) { habit ->
                 HabitCardComposable(
-                    habit = habit,
+                    today = today,
+                    name = habit.name,
+                    daysProgress = habit.days,
                     onClick = { viewModel.markAsCompleted(habit.id) },
-                    onDelete = { habitId ->
-                        viewModel.removeHabit(habitId)
-                    }
+                    onDelete = {
+                        viewModel.removeHabit(habit.id)
+                    },
                 )
             }
         }
