@@ -66,7 +66,7 @@ fun HabitCardComposable(
         content = {
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                onClick = onClick
+                //onClick = onClick  //здесь убрал
             ) {
                 Column(Modifier.padding(4.dp)) {
                     Text(
@@ -84,7 +84,7 @@ fun HabitCardComposable(
                                 day = day,
                                 progress = daysProgress[day] ?: false,
                                 isToday = (day == today),
-                                onClick = {}
+                                onClick = onClick,// Здесь добавил
                             )
                         }
                     }
@@ -106,7 +106,7 @@ fun DayOfWeekComposable(
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
-            .size(48.dp)
+            .size(46.dp)
             .padding(4.dp)
             .background(
                 if (isToday && progress) MaterialTheme.colorScheme.primaryContainer

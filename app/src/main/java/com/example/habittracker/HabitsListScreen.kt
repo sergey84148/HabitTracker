@@ -38,7 +38,7 @@ fun HabitListScreen(
             ) {
                 Icon(
                     imageVector = Icons.Default.Add,
-                    contentDescription = "Введите название привычку"
+                    contentDescription = "Введите название привычки"
                 )
             }
         }
@@ -47,10 +47,22 @@ fun HabitListScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-        ) {
+        ) {if (habits.isEmpty()) {
             item {
                 Text(
-                    text = "Привычки (нажмите + для добавления или смахните влево для удаления)",
+                    text = "Нажмите + для добавления привычки или смахните влево для удаления",
+                    style = MaterialTheme.typography.headlineMedium,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentWidth(unbounded = false)
+                        .padding(vertical = 16.dp),
+                    textAlign = TextAlign.Center
+                )
+            }
+        }
+            item {
+                Text(
+                    text = "Мои привычки",
                     style = MaterialTheme.typography.headlineMedium,
                     modifier = Modifier
                         .fillMaxWidth()

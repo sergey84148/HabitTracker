@@ -42,5 +42,5 @@ fun AddHabitScreen(viewModel: HabitViewModel, onSave: () -> Unit) {
 @Composable
 fun AddHabitScreenPreview() {
     val viewModel: HabitViewModel = viewModel()
-    AddHabitScreen(viewModel, {})
+    AddHabitScreen(viewModel) {}
 }
