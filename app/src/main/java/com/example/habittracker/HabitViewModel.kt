@@ -6,7 +6,9 @@ import com.example.habittracker.database.HabitEntity
 import com.example.habittracker.database.HabitDao
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -18,11 +20,17 @@ class HabitViewModel @Inject constructor(
     private val dao: HabitDao
 ) : ViewModel() {
 
+    // Добавляем состояние загрузки
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading
+
+
     val habits = dao.observeAllHabits()
         .map { entities ->
             entities.map { entity ->
                 Habit(
                     id = entity.id,
+                    isCompleted = false,
                     name = entity.name,
                     days = entity.days
                 )
@@ -34,9 +42,11 @@ class HabitViewModel @Inject constructor(
             initialValue = emptyList()
         )
 
-
     fun createHabit(name: String) {
         if (name.isBlank()) return
+
+        // Устанавливаем флаг загрузки перед операцией
+        _isLoading.value = true
 
         val newHabit = HabitEntity(
             name = name.trim(),
@@ -53,11 +63,15 @@ class HabitViewModel @Inject constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
             dao.insert(newHabit)
+            // Снимаем флаг после завершения
+            _isLoading.value = false
         }
     }
 
-
     fun markAsCompleted(id: Int) {
+        // Устанавливаем флаг загрузки перед операцией
+        _isLoading.value = true
+
         viewModelScope.launch(Dispatchers.IO) {
             val habit = dao.getHabitById(id)
             habit?.let {
@@ -68,14 +82,19 @@ class HabitViewModel @Inject constructor(
                 val updatedHabit = it.copy(days = updatedDays)
                 dao.update(updatedHabit)
             }
+            // Снимаем флаг после завершения
+            _isLoading.value = false
         }
     }
 
     fun removeHabit(id: Int) {
+        // Устанавливаем флаг загрузки перед операцией
+        _isLoading.value = true
+
         viewModelScope.launch(Dispatchers.IO) {
             dao.deleteById(id)
+            // Снимаем флаг после завершения
+            _isLoading.value = false
         }
     }
-
-    
 }

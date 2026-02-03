@@ -106,7 +106,7 @@ fun DayOfWeekComposable(
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
-            .size(46.dp)
+            .size(48.dp)
             .padding(4.dp)
             .background(
                 if (isToday && progress) MaterialTheme.colorScheme.primaryContainer

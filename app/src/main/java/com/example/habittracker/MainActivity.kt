@@ -27,7 +27,7 @@ class MainActivity : ComponentActivity() {
                         }
                         composable("add_habit") {
                             AddHabitScreen(viewModel) {
-                                navController.navigate("habit_list")
+                                navController.navigateUp()
                             }
                         }
                     }
