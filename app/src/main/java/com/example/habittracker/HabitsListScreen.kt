@@ -1,15 +1,13 @@
 package com.example.habittracker
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.CircularProgressIndicator
@@ -18,12 +16,28 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import java.time.DayOfWeek
 import java.time.LocalDate
-import androidx.compose.foundation.layout.defaultMinSize
+
+private val daysOfWeekNames = mapOf(
+    DayOfWeek.MONDAY to "Пн",
+    DayOfWeek.TUESDAY to "Вт",
+    DayOfWeek.WEDNESDAY to "Ср",
+    DayOfWeek.THURSDAY to "Чт",
+    DayOfWeek.FRIDAY to "Пт",
+    DayOfWeek.SATURDAY to "Сб",
+    DayOfWeek.SUNDAY to "Вс",
+)
 
 @Composable
 fun HabitListScreen(
@@ -35,7 +49,17 @@ fun HabitListScreen(
     val isLoading by viewModel.isLoading.collectAsState()
 
     // Список дней недели
-    val daysOfWeek = listOf("Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс")
+    val daysWithProgress = remember(habits) {
+        DayOfWeek.entries.map { dayOfWeek ->
+            val doneHabits = habits.sumOf { habit ->
+                habit.days.count { it.key == dayOfWeek && it.value }
+            }
+
+            val progress = doneHabits.toFloat() / habits.size.toFloat()
+
+            DayWithProgress(daysOfWeekNames.getValue(dayOfWeek), progress)
+        }
+    }
 
     Scaffold(
         floatingActionButton = {
@@ -52,37 +76,7 @@ fun HabitListScreen(
     ) { innerPadding ->
         Column(modifier = Modifier.fillMaxSize()) {
             // Блок с кругляшами для дней недели
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
-                    .defaultMinSize(minHeight = 50.dp),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                daysOfWeek.forEach { day ->
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier
-                            .width(50.dp)
-                            .padding(4.dp)
-                    ) {
-                        CircularProgressIndicator(
-                            progress = 0f,
-                            modifier = Modifier
-                                .size(50.dp)
-                                .defaultMinSize(minWidth = 50.dp, minHeight = 50.dp),
-                            color = MaterialTheme.colorScheme.primary,
-                            strokeWidth = 8.dp
-                        )
-                        Text(
-                            text = day,
-                            fontSize = 18.sp,
-                            modifier = Modifier.padding(top = 8.dp),
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
-                    }
-                }
-            }
+            DaysProgressRow(daysWithProgress)
 
             LazyColumn(
                 modifier = Modifier
@@ -110,10 +104,10 @@ fun HabitListScreen(
                                 .padding(16.dp),
                             contentAlignment = Alignment.Center
                         ) {
+                            // На самом деле, не уверен, что при 100% работе с БД есть в этом необходимость и будет как-то заметно)
                             CircularProgressIndicator(
-                                progress = 0.3f,
-                                strokeWidth = 4.dp,
-                                color = Color.Blue
+                                strokeWidth = 4.dp, // Если нужна просто крутилка, прогресс не указываем
+                                color = Color.Blue,
                             )
                         }
                     }
@@ -132,12 +126,4 @@ fun HabitListScreen(
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun HabitListScreenPreview() {
-    val viewModel: HabitViewModel = viewModel()
-    val navController = rememberNavController()
-    HabitListScreen(navController, viewModel)
 }
