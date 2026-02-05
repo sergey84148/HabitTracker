@@ -69,7 +69,7 @@ fun HabitListScreen(
             ) {
                 Icon(
                     imageVector = Icons.Default.Add,
-                    contentDescription = "Введите название привычки"
+                    contentDescription = "Введите название дела"
                 )
             }
         }
@@ -86,7 +86,7 @@ fun HabitListScreen(
                 if (habits.isEmpty()) {
                     item {
                         Text(
-                            text = "Нажмите + для добавления привычки или смахните влево для удаления",
+                            text = "Нажмите + \nдля добавления дела  \nа при удалении добавленного смахните влево.\nЧто бы отметить как выполнено нужно нажать на день недели на созданном деле. ",
                             style = MaterialTheme.typography.headlineMedium,
                             modifier = Modifier
                                 .fillMaxWidth()

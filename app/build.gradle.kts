@@ -1,8 +1,6 @@
 import org.gradle.kotlin.dsl.implementation
 
 
-
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
@@ -79,4 +77,8 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    androidTestImplementation(platform(libs.androidx.compose.bom)) // Тоже надо
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
 }

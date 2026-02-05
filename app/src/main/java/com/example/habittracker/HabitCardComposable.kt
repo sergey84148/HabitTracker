@@ -57,7 +57,7 @@ fun HabitCardComposable(
             ) {
                 Icon(
                     imageVector = Icons.Filled.Delete,
-                    contentDescription = "Удалить привычку",
+                    contentDescription = "Удалить дело",
                     tint = Color.White,
                     modifier = Modifier.size(24.dp)
                 )

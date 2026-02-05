@@ -15,12 +15,12 @@ fun AddHabitScreen(viewModel: HabitViewModel, onSave: () -> Unit) {
     var name by rememberSaveable(stateSaver = TextFieldValue.Saver) { mutableStateOf(TextFieldValue()) }
 
     Column(Modifier.fillMaxSize().padding(16.dp)) {
-        Text("Новая привычка", style = MaterialTheme.typography.headlineMedium)
+        Text("Новое дело", style = MaterialTheme.typography.headlineMedium)
         Spacer(modifier = Modifier.height(16.dp))
         TextField(
             value = name,
             onValueChange = { name = it },
-            label = { Text("Название привычки") },
+            label = { Text("Название дела") },
             singleLine = true,
             modifier = Modifier.fillMaxWidth()
         )
